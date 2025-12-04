@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">DeviceShield</string>
+    <string name="title_activity_main">DeviceShield</string>
+    <string name="package_name">com.example.deviceshield</string>
+    <string name="custom_url_scheme">com.example.deviceshield</string>
+</resources>

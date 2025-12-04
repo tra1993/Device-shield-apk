@@ -1,0 +1,50 @@
+   name: Build Android APK
+   on:
+     push:
+       branches: [ main ]
+
+   jobs:
+     build:
+       runs-on: debian-latest
+       steps:
+         - uses: actions/checkout@v3
+
+         # Java 17 ထည့်သွင်းခြင်း
+         - name: Set up JDK 21
+           uses: actions/setup-java@v3
+           with:
+             distribution: 'zulu'
+             java-version: '21'
+
+         # Node.js ထည့်သွင်းခြင်း
+         - name: Setup Node.js
+           uses: actions/setup-node@v3
+           with:
+             node-version: '18'
+
+         # Library တွေသွင်းပြီး Build လုပ်ခြင်း
+         - name: Install Dependencies
+           run: npm install
+
+         - name: Build Web Assets
+           run: npm run build
+
+         # Android ဖိုင်တွေ Sync လုပ်ခြင်း
+         - name: Add & Sync Android
+           run: |
+             npx cap add android || true
+             npx cap sync
+
+         # APK ထုတ်ခြင်း (RAM ပြဿနာမရှိတော့ပါ)
+         - name: Build APK with Gradle
+           run: |
+             cd android
+             chmod +x gradlew
+             ./gradlew assembleDebug
+
+         # ထွက်လာတဲ့ APK ကို Upload တင်ပေးခြင်း
+         - name: Upload APK
+           uses: actions/upload-artifact@v3
+           with:
+             name: device-shield-apk
+             path: android/app/build/outputs/apk/debug/app-debug.apk
