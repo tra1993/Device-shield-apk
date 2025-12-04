@@ -40,7 +40,8 @@
            run: |
              cd android
              chmod +x gradlew
-             ./gradlew assembleDebug
+           ./gradlew assembleDebug --no-daemon --stacktrace
+
 
          # ထွက်လာတဲ့ APK ကို Upload တင်ပေးခြင်း
          - name: Upload APK
